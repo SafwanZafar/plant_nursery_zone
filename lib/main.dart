@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_nursery_zone/admin/Nurseries_request.dart';
 import 'package:plant_nursery_zone/admin/admin_dashboard.dart';
-import 'package:plant_nursery_zone/admin/customers.dart';
-import 'package:plant_nursery_zone/admin/registered_nurseries.dart';
 import 'package:plant_nursery_zone/authentication/login.dart';
 import 'package:plant_nursery_zone/authentication/register.dart';
 
@@ -17,9 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: RegisteredNurseries(),
+      home: AdminDashboard(),
     );
   }
 }
