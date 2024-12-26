@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/custom_widget/plant_item_widget.dart';
+import 'package:plant_nursery_zone/customer/order_tracking.dart';
 import 'package:plant_nursery_zone/model/cart_model.dart';
 import 'package:plant_nursery_zone/customer/plant_detail.dart';
 import 'package:plant_nursery_zone/customer/plant_item_tile.dart';
@@ -35,7 +36,9 @@ class _HomeState extends State<Home> {
                 child: Icon(Icons.shopping_cart,color: Colors.white,)),
             
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderTracking()));
+                },
                 icon: Icon(
                   Icons.search,
                   color: Colors.white,

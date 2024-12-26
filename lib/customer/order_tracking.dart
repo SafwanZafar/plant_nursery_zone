@@ -32,7 +32,7 @@ class _OrderTrackingState extends State<OrderTracking> {
           Textfield(
             name: 'Enter Order Number',
             Controller: TextEditingController()),
-          Button(onpress: (){}, buttonName: 'TRACK ORDER'),
+          Center(child: Button(onpress: (){}, buttonName: 'TRACK ORDER',height: 48,weight: 250,)),
           
           Padding(
             padding: const EdgeInsets.only(left: 20,top: 20),

@@ -83,7 +83,7 @@ class _CostomerFinalState extends State<CostomerFinal> {
           ),
           Button(onpress: (){
             Navigator.push(context,MaterialPageRoute(builder: (context)=>Home()));
-          }, buttonName: 'Continue to shopping'),
+          }, buttonName: 'Continue to shopping', height: 48,weight: 120,),
 
         ],
       ),
