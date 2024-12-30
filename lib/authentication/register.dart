@@ -88,7 +88,8 @@ class _RegisterState extends State<Register> {
                 height: 50,
               ),
               Textfield(
-                name: 'Name',
+                icon:Icon(Icons.person),
+                hint: 'Name',
                 Controller: nameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -98,7 +99,8 @@ class _RegisterState extends State<Register> {
                 },
               ),
               Textfield(
-                name: 'Address',
+                icon: Icon(Icons.home,color: Colors.green,),
+                hint: 'Address',
                 Controller: addressController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -109,7 +111,8 @@ class _RegisterState extends State<Register> {
                 },
               ),
               Textfield(
-                  name: 'Email',
+                  icon: Icon(Icons.email),
+                  hint: 'Enter your email',
                   Controller: emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -121,7 +124,8 @@ class _RegisterState extends State<Register> {
                     return null;
                   }),
               Textfield(
-                name: 'PhoneNumber',
+                icon: Icon(Icons.phone,color: Colors.green,),
+                hint: 'Enter your contact number',
                 Controller: phoneController,
                 validator: (value) {
                   if(value == null || value.isEmpty)
@@ -130,7 +134,8 @@ class _RegisterState extends State<Register> {
                 },
               ),
               Textfield(
-                name: 'Password',
+                icon: Icon(Icons.lock,color: Colors.green,),
+                hint: ' Enter your password',
                 Controller: passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -143,7 +148,8 @@ class _RegisterState extends State<Register> {
                 },
               ),
               Textfield(
-                name: 'Confirm Password',
+                icon: Icon(Icons.lock),
+                hint: 'Confirm Password',
                 Controller: confirmPasswordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {

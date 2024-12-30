@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 class Textfield extends StatefulWidget {
   final String? Function(String?)? validator;
   TextEditingController Controller = TextEditingController();
-  String name;
+  final TextInputType keyboardType;
+  bool obscure ;
+  bool readOnly;
+  final Icon icon;
+  final VoidCallback ? onTap;
+  String hint;
   Textfield(
       {super.key,
-      required this.name,
+        this.obscure=false,
+      required this.hint, this.keyboardType=TextInputType.text,this.readOnly=false,
       this.validator,
+      this.onTap,
+        required this.icon,
       required this.Controller});
 
   @override
@@ -17,22 +25,40 @@ class Textfield extends StatefulWidget {
 class _TextfieldState extends State<Textfield> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
-      child: InkWell(
-          child: Container(
-        height: 64,
-        width: 357,
-        child: TextFormField(
-          controller: widget.Controller,
-          decoration: InputDecoration(
-              hintText: widget.name,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(width: 2, color: Colors.green))),
-          validator: widget.validator,
+    return InkWell(
+      onTap: widget.onTap,
+        child: Container(
+      height: 40,
+      width: 300,
+      child: TextFormField(
+        obscureText: widget.obscure,
+        readOnly: widget.readOnly,
+        keyboardType: widget.keyboardType,
+        controller: widget.Controller,
+        decoration: InputDecoration(
+          prefixIcon: widget.icon,
+            hintText: widget.hint,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade100)),
+            filled: true,
+            fillColor: Colors.grey.shade100,
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade100)
+            ),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                color: Colors.grey.shade100
+              )
+            ),
+          contentPadding: EdgeInsets.only(left: 20),
+
+
         ),
-      )),
-    );
+        validator: widget.validator,
+      ),
+    ));
   }
 }

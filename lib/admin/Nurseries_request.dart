@@ -16,6 +16,11 @@ class _NurseriesRequestState extends State<NurseriesRequest> {
   bool is_visible =false;
   List<Map<String,dynamic>> items =[{
   }];
+  void initState() {
+    fetch_nursery_request();
+
+    super.initState();
+  }
   Future<void> fetch_nursery_request() async{
        Map<String,dynamic> Params ={
          'pending_request':true,
@@ -30,10 +35,18 @@ class _NurseriesRequestState extends State<NurseriesRequest> {
        );
        if(response.statusCode==200){
          var response_data = (jsonDecode(response.body)as List).map((e) =>e as Map<String,dynamic>).toList();
-         items = response_data;
+         setState(() {
+           items = response_data;
+         });
        }
        else if(response.statusCode==404){
-         is_visible = true ;
+         setState(() {
+           setState(() {
+             is_visible = true ;
+
+           });
+
+         });
 
        }
        else
@@ -51,9 +64,11 @@ class _NurseriesRequestState extends State<NurseriesRequest> {
       headers: {'Content-Type': 'application/json'},
     );
     if(response.statusCode==200){
+
       var response_data = jsonDecode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response_data['message'])));
-      fetch_nursery_request();
+       fetch_nursery_request();
+
 
     }
     else{
@@ -62,12 +77,9 @@ class _NurseriesRequestState extends State<NurseriesRequest> {
 
   }
   @override
-  void initState() {
-    super.initState();
-  }
+
   @override
   Widget build(BuildContext context) {
-    fetch_nursery_request();
     return Scaffold(
       appBar: AppBar(
         title: const Text(

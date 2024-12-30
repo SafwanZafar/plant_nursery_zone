@@ -27,7 +27,10 @@ class _CustomersState extends State<Customers> {
    );
    if(response.statusCode ==200){
      var response_data = (jsonDecode(response.body)as List).map((e)=>e as Map<String,dynamic>).toList();
-     items = response_data;
+     setState(() {
+       items = response_data;
+
+     });
 
    }
    else {
@@ -36,7 +39,7 @@ class _CustomersState extends State<Customers> {
   }
   @override
   void initState() {
-    fetch_customers();
+      fetch_customers();
     super.initState();
   }
   @override
