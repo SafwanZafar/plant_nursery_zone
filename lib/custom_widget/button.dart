@@ -6,9 +6,11 @@ class Button extends StatefulWidget {
    Color color;
   final String buttonName ;
    final VoidCallback onpress;
+    IconData? icon;
    Button({super.key, required this.onpress,
      required this.buttonName ,
      this.color=Colors.green,
+     this.icon ,
      required this.height,required this.weight});
 
   @override
@@ -30,10 +32,18 @@ class _ButtonState extends State<Button> {
             borderRadius: BorderRadius.circular(10)
           ),
           child: Center(
-            child: Text(
-              widget.buttonName,
-              style: TextStyle(
-                  color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(widget.icon,color: Colors.white,),
+                SizedBox(width: 5),
+                Text(
+                  widget.buttonName,
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500,),
+                ),
+              ],
             ),
           ),
         ),
@@ -41,3 +51,4 @@ class _ButtonState extends State<Button> {
     );
   }
 }
+

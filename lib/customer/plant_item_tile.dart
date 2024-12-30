@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/customer/plant_detail.dart';
 import 'package:plant_nursery_zone/customer/shopping_cart.dart';
+import 'package:plant_nursery_zone/util/app_constant.dart';
+import 'package:plant_nursery_zone/util/string_util.dart';
 
 class PlantItemTile extends StatelessWidget {
 
@@ -20,15 +22,13 @@ class PlantItemTile extends StatelessWidget {
 
   // final color;
 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4),
       child: InkWell(
         onTap:onTap,
-        //     () {
-        //   Navigator.push(context, MaterialPageRoute(builder: (context)=>ShoppingCart()));
-        // },
         child: Card(
           child: Container(
             height: 300,
@@ -44,19 +44,19 @@ class PlantItemTile extends StatelessWidget {
                   //item name
                ClipRRect(
                    borderRadius: BorderRadius.only(topLeft:Radius.circular(12),topRight:Radius.circular(12)),
-                   child: Image.asset(imagePath)),
-                  //
+                   child:
+                   Image.network(
+                       height: 100,
+                       (base_url+StringUtil.removeFirstSlash(imagePath)))),
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Text(itemName),
                   ),
-                  // // item Price
+                  // item Price
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Text('RS:'+itemPrice),
                   ),
-
-
               ]
                     ),
             )

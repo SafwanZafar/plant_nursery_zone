@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:plant_nursery_zone/admin/admin_dashboard.dart';
 import 'package:plant_nursery_zone/authentication/register.dart';
+import 'package:plant_nursery_zone/customer/home.dart';
 import 'package:plant_nursery_zone/util/app_constant.dart';
 import 'package:http/http.dart' as http;
 import '../custom_widget/button.dart';
@@ -26,14 +28,33 @@ class _LoginState extends State<Login> {
       url,
       headers: {'Content-Type': 'application/json'},
     );
+    print(response.body);
     if (response.statusCode == 200) {
       var response_data = jsonDecode(response.body);
       SharedPreferences sp =await SharedPreferences.getInstance();
-      String user_id = response_data['user_id']??'';
+      String user_id = response_data['user_id'].toString()??'';
+      String userEmail = response_data['email'].toString()??'';
+      String userName = response_data['name'].toString()??'';
+      String userContactNumber = response_data['contact_number'].toString()??'';
+      String userAddress = response_data['address'].toString()??'';
       sp.setString('id', user_id);
+      sp.setString('email', userEmail);
+      sp.setString('name', userName);
+      sp.setString('address', userAddress);
+      sp.setString('contact_number', userContactNumber);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login Sucessfully ")),
       );
+      if(response_data['role'] == "Customer"){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+      }
+      else if(response_data['role'] == "Nursery"){
+        //****NAvigate to Nusery Dashbaord
+      }
+      else{
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminDashboard()));
+      }
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +122,7 @@ class _LoginState extends State<Login> {
                 Controller: passwordController,
               ),
               Button(
-                buttonName: 'LogIn',
+                buttonName: 'Login',
                 height: 50,weight: 357,
                 onpress: () async {
                   call_login_api();

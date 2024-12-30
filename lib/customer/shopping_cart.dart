@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/custom_widget/custom_text.dart';
+import 'package:plant_nursery_zone/customer/costomer_final.dart';
+import 'package:plant_nursery_zone/customer/order_tracking.dart';
 import 'package:plant_nursery_zone/customer/plant_detail.dart';
 import 'package:plant_nursery_zone/model/cart_model.dart';
+import 'package:plant_nursery_zone/util/app_constant.dart';
+import 'package:plant_nursery_zone/util/string_util.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -21,8 +25,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
         appBar: AppBar(
           leading: InkWell(
               onTap: () {
-                Navigator.pop(context,
-                    MaterialPageRoute(builder: (context) => PlantDetail()));
+                // Navigator.pop(context,
+                //     MaterialPageRoute(builder: (context) => PlantDetail()));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -45,7 +49,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                    child: ListView.builder(
                      itemCount: value.cartItems.length,
                        itemBuilder: (context,index){
-                       var item = value.cartItems[index];
+                       var item = value.cartItems[index] as CartModel;
                        print(item);
                          return Padding(
                            padding: const EdgeInsets.all(8.0),
@@ -59,9 +63,19 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                //>>>>>>>List of cart>>>>>
 
                                child: ListTile(
-                                 leading: Image.asset(item["image_url"]),
-                                 title: Text(item["name"]),
-                                 subtitle: Text('RS:'+item["price"]),
+                                 leading: ClipRRect(
+                                     borderRadius: BorderRadius.circular(8),
+                                     child: Image.network(base_url+StringUtil.removeFirstSlash(item.model!.image_Url))),
+                                 title: Text(item.model!.name),
+                                 subtitle: Column(
+                                   mainAxisAlignment: MainAxisAlignment.start,
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Text('RS:'+item.model!.price),
+                                     Text('Quantity : '+item.quantity.toString())
+                                   ],
+                                 ),
+
 
                                  trailing: InkWell(
                                    onTap: ()=>
@@ -79,7 +93,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                    )
                ),
 
-               // >>>>>>total>>>..
+               // >>>>>>>>>>>>>>>>>Total>>>>>>>>>>>>>>>..
 
                Padding(
                  padding: const EdgeInsets.only(left: 15,right: 15,bottom: 20),
@@ -111,10 +125,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
                            ],),
 
                            InkWell(
-                             onTap: (){},
+                             onTap: (){
+                               Navigator.push(context, MaterialPageRoute(builder: (context)=>CostomerFinal()));
+                             },
                              child: Container(
                                alignment: Alignment.center,
-                               margin: EdgeInsets.only(left: 80),
+                               margin: EdgeInsets.only(left: 85),
                                width: 90,
                                height: 30,
                                decoration: BoxDecoration(
@@ -130,7 +146,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                    fontColor: Colors.white,
                                    ),
                                    Padding(
-                                     padding: const EdgeInsets.only(left: 2),
+                                     padding: const EdgeInsets.only(left:2),
                                      child: Icon(Icons.arrow_forward_ios,size: 14,color: Colors.white,),
                                    ),
                                  ],

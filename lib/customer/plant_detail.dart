@@ -5,14 +5,18 @@ import 'package:plant_nursery_zone/customer/home.dart';
 import 'package:plant_nursery_zone/customer/order_tracking.dart';
 import 'package:plant_nursery_zone/customer/plant_item_tile.dart';
 import 'package:plant_nursery_zone/customer/shopping_cart.dart';
+import 'package:plant_nursery_zone/model/plant_model.dart';
 import 'package:provider/provider.dart';
 
 import '../model/cart_model.dart';
+import '../util/app_constant.dart';
+import '../util/string_util.dart';
 
 class PlantDetail extends StatefulWidget {
+  final PlantModel  plantDetails;
 
    PlantDetail({super.key,
-    this.onTap});
+    this.onTap,required this.plantDetails});
 
   void Function() ? onTap;
 
@@ -59,23 +63,25 @@ class _PlantDetailState extends State<PlantDetail> {
             children: [
               Container(
                 color: Colors.green.shade50,
-                height: 200,
+                // height: 200,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Center(child: Image.asset('asset/plant1.jpg'),
+                  child: Center(child:   Image.network(
+                    height: 235,
+                      (base_url+StringUtil.removeFirstSlash(widget.plantDetails.image_Url))),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 20),
-                child: CustomText(text: 'SunFlower',
+                child: CustomText(text: widget.plantDetails.name,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20, left: 20),
                 child: CustomText(
-                  text: 'RS:500', fontWeight: FontWeight.bold, fontSize: 18,),
+                  text: 'RS:'+widget.plantDetails.price, fontWeight: FontWeight.bold, fontSize: 18,),
               ),
               SizedBox(height: 20,),
               Row(
@@ -89,7 +95,7 @@ class _PlantDetailState extends State<PlantDetail> {
 
                     Row(children: [
                       InkWell(onTap: () {
-                        if (_counter! > 1) {
+                        if (_counter > 1) {
                           decrementCounter();
                         }
                       },
@@ -113,6 +119,7 @@ class _PlantDetailState extends State<PlantDetail> {
 
                       InkWell(
                         onTap: () {
+                          if(_counter < widget.plantDetails.stock)
                           incrementCounter();
                         },
                         child: Container(
@@ -142,22 +149,14 @@ class _PlantDetailState extends State<PlantDetail> {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                 child: CustomText(
-                  text: 'adhfewhfjdaskfjkwehjkfhjkdakdfhjkehfasjdhsjdhkaadsdsadsdfs sd f jsdsdhsad sajdgsjadjas asds;adsadsasdsadsasdsaajsdgjwdsaddsadshdkahd aksdsadjsahdfdsahdhfhdsgfdgsfghdsa',
+                  text: widget.plantDetails.description,
                   fontSize: 13,),
               ),
               SizedBox(height: 80,),
               InkWell(
                 onTap: (){
                   Provider.of<CartModel>(context,listen: false).
-                  addItemToCart(  {
-                    "nursery_id": 2,
-                    "plant_id": 4,
-                    "name": "Sunflower ",
-                    "description": "halwa",
-                    "price": "300",
-                    "stock": 75,
-                    "image_url": "asset/plant1.jpg"
-                  });
+                  addItemToCart(CartModel(model: widget.plantDetails, quantity: _counter) );
 
                 },
                 child: Center(

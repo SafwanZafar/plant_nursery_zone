@@ -1,65 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_nursery_zone/model/plant_model.dart';
 
 
 class CartModel extends ChangeNotifier{
-  // list of Items on sale
-
-  // final List _shopItems = [
-  //   ["Avacado " ,  "400", "asset/plant1.jpg"],
-  //   ["lavacado " , "300", "asset/planti2.jpg"],
-  //   ["qavacado " , "200", "asset/plant1.jpg"],
-  //   ["mavacado " , "100", "asset/planti2.jpg"],
-  //   ["savacado " , "50", "asset/plant1.jpg"],
-  // ];
-
-  List<Map <String, dynamic>> plants = [
-    {
-    "nursery_id": 2,
-    "plant_id": 1,
-    "name": "Sunflower ",
-    "description": "halwa",
-    "price": "300",
-    "stock": 75,
-  "image_url": "asset/plant1.jpg"
-  },
-    {
-    "nursery_id": 2,
-    "plant_id": 3,
-    "name": "Sunflower ",
-    "description": "halwa",
-    "price": "300",
-    "stock": 75,
-  "image_url": "asset/plant1.jpg"
-  },
-    {
-    "nursery_id": 2,
-    "plant_id": 4,
-    "name": "Sunflower ",
-    "description": "halwa",
-    "price": "300",
-    "stock": 75,
-  "image_url": "asset/plant1.jpg"
-  },
+ PlantModel ? model;
+ int ? quantity;
 
 
-  ];
+CartModel({
+  this.model,
+   this.quantity
+});
+
 
   //list of cart item
-  List<Map<String, dynamic>> _cartItems = [];
-  get shopItems => plants;
+  List<CartModel> _cartItems = <CartModel>[];
   get cartItems => _cartItems;
 
   //add item to cart
- void addItemToCart(Map<String , dynamic>item) {
-   if(_cartItems.contains(item)){
-     _cartItems.remove(item);
-     _cartItems.add(item);
-   }
-   else{
-     _cartItems.add(item);
-   }
+ void addItemToCart(CartModel item) {
    print(cartItems);
+   for(var _cart in cartItems ){
+     _cart as CartModel;
+     if(_cart.model!.plant_id == item.model!.plant_id){
+       _cartItems.remove(_cart);
+       _cartItems.add(item);
+       return;
+     }
+   }
+   _cartItems.add(item);
+
+
  }
 
    //remove from item to cart
@@ -71,7 +43,7 @@ class CartModel extends ChangeNotifier{
    String calculateTotal(){
    double totalPrice = 0;
    for(int i = 0; i<_cartItems.length; i++){
-     totalPrice += double.parse(_cartItems[i]["price"]);
+     totalPrice +=( double.parse(_cartItems[i].model!.price) * double.parse(_cartItems[i].quantity.toString()));
    }
    return totalPrice.toStringAsFixed(2);
 }
