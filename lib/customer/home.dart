@@ -16,12 +16,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _searchQuery = '';
-
+  Map<String,dynamic> param = {
+    "skip": 0.toString(),
+    "limit": 20.toString()
+  };
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<PlantProvider>(context, listen: false).getPlants();
+      Provider.of<PlantProvider>(context, listen: false).getPlants(param);
     });
   }
 
