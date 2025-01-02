@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/custom_widget/button.dart';
 import 'package:plant_nursery_zone/custom_widget/custom_text.dart';
@@ -5,6 +8,8 @@ import 'package:plant_nursery_zone/customer/home.dart';
 import 'package:plant_nursery_zone/customer/order_successfully.dart';
 import 'package:plant_nursery_zone/customer/shopping_cart.dart';
 import 'package:plant_nursery_zone/model/cart_model.dart';
+import 'package:plant_nursery_zone/model/order_model.dart';
+import 'package:plant_nursery_zone/provider/order_place_provider.dart';
 import 'package:plant_nursery_zone/util/string_util.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +48,9 @@ class _CostomerFinalState extends State<CostomerFinal> {
 
   @override
   Widget build(BuildContext context) {
+
+    final orderProvider = Provider.of<OrderPlaceProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -243,9 +251,29 @@ class _CostomerFinalState extends State<CostomerFinal> {
                 //****************************************8
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Button(onpress: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => OrderSuccessfully()));
+                  child: Button(onpress: ()async{
+                    List<OrderModel> orderList = [];
+                      for(var item in value.cartItems){
+                        item as CartModel;
+                        print(item);
+                       orderList.add(OrderModel(user_id:int.parse(_userId.toString())  ,plant_id:item.model!.plant_id as int,quantity:item.quantity as int));
+
+                      };
+
+                      await orderProvider.sendOrder(orderList);
+                    if(orderProvider.response != null){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: CustomText(text: orderProvider.response!['message'].toString()
+                          )
+                      )
+                      );
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => OrderSuccessfully()));
+                    }
+
+
+
+
                   }, buttonName: 'Proceed to Payment', height: 48, weight: 300, ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_nursery_zone/custom_widget/search_bar_widget.dart';
 
 class PlantItemWidget extends StatelessWidget {
   const PlantItemWidget({super.key,
@@ -22,7 +23,8 @@ final String imageUrl;
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          //Image url
+         const SizedBox(
             height: 7,
           ),
           Center(
@@ -38,14 +40,14 @@ final String imageUrl;
             child: Text(
                 textAlign: TextAlign.left,
                 plantName,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8,),
-            child: Text('RS:$price',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,),),
+            child: Text('RS:$price',style: const TextStyle(color: Colors.red,fontWeight: FontWeight.bold,),),
           ),
         ],
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Button extends StatefulWidget {
   double height ;
-  double weight ;
+  double? weight ;
    Color color;
   final String buttonName ;
    final VoidCallback onpress;
@@ -11,7 +11,8 @@ class Button extends StatefulWidget {
      required this.buttonName ,
      this.color=Colors.green,
      this.icon ,
-     required this.height,required this.weight});
+     required this.height,
+     this.weight});
 
   @override
   State<Button> createState() => _ButtonState();

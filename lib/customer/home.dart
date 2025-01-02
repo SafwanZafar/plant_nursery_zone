@@ -1,87 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:plant_nursery_zone/custom_widget/plant_item_widget.dart';
 import 'package:plant_nursery_zone/customer/order_tracking.dart';
-import 'package:plant_nursery_zone/model/cart_model.dart';
+import 'package:plant_nursery_zone/customer/shopping_cart.dart';
+import 'package:provider/provider.dart';
+import 'package:plant_nursery_zone/custom_widget/search_bar_widget.dart';
 import 'package:plant_nursery_zone/customer/plant_detail.dart';
 import 'package:plant_nursery_zone/customer/plant_item_tile.dart';
-import 'package:plant_nursery_zone/customer/shopping_cart.dart';
-import 'package:plant_nursery_zone/util/app_constant.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-
 import '../provider/plant_provider.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key,});
-
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
+
 class _HomeState extends State<Home> {
+  String _searchQuery = '';
+
+  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<PlantProvider>(context,listen: false).getPlants();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<PlantProvider>(context, listen: false).getPlants();
     });
   }
-    @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-        appBar: AppBar(
-          backgroundColor: Colors.green,
-          title: Text(
-            'Nursing Plant Zone',
-            style: TextStyle(color: Colors.white),
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Text(
+          'Nursing Plant Zone',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ShoppingCart()));// Navigate to cart
+            },
+            icon: Icon(Icons.shopping_cart, color: Colors.white),
           ),
-          actions: <Widget>[
-            InkWell(
-              onTap: (){
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>PlantDetail()));
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderTracking())); // Navigate to order tracking
+            },
+            icon: Icon(Icons.delivery_dining, color: Colors.white),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            // Search Bar Widget
+            SearchBarWidget(
+              onSearchChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
               },
-                
-                child: Icon(Icons.shopping_cart,color: Colors.white,)),
-            
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderTracking()));
+              hintText: 'Search for a plant...',
+            ),
+            SizedBox(height: 12),
+
+            // Plant List (GridView)
+            Expanded(
+              child: Consumer<PlantProvider>(
+                builder: (context, plantProvider, child) {
+                  final plants = plantProvider.plants;
+
+                  // Filter plants based on the search query
+                  final filteredPlants = _searchQuery.isEmpty
+                      ? plants
+                      : plants
+                      .where((plant) => plant.name
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase()))
+                      .toList();
+
+                  if (filteredPlants.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No results found',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
+                  }
+
+                  return GridView.builder(
+                    itemCount: filteredPlants.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      final plant = filteredPlants[index];
+                      return PlantItemTile(
+                        imagePath: plant.image_Url,
+                        itemName: plant.name,
+                        itemPrice: plant.price,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlantDetail(plantDetails: plant),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
                 },
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ))
+              ),
+            ),
           ],
         ),
-        body: Expanded(
-          child: Consumer<PlantProvider>(
-              builder:(context, value, child){
-                final plants = value.plants;
-                return GridView.builder(
-                  itemCount: plants.length,
-                    padding:EdgeInsets.all(12),
-                    gridDelegate:
-                         const SliverGridDelegateWithFixedCrossAxisCount(
-                             crossAxisCount: 2),
-                    itemBuilder: (context, index){
-                    var item = plants[index];
-                      return PlantItemTile(
-                        imagePath: item.image_Url,
-                          itemName:item.name,
-                          itemPrice:item.price,
-                          onTap: (){
-                          // Provider.of<CartModel>(context,listen: false).addItemToCart(index);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>PlantDetail(plantDetails: item,)));
-
-                          },
-                        // color: Colors.grey);
-                      );
-
-                    }
-                    );
-              }
-              ),
-        ),
+      ),
     );
   }
 }

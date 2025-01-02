@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/admin/admin_dashboard.dart';
 import 'package:plant_nursery_zone/authentication/register.dart';
+import 'package:plant_nursery_zone/customer/delievery_manage.dart';
 import 'package:plant_nursery_zone/customer/home.dart';
 import 'package:plant_nursery_zone/util/app_constant.dart';
 import 'package:http/http.dart' as http;
@@ -51,6 +52,9 @@ class _LoginState extends State<Login> {
       }
       else if(response_data['role'] == "Nursery"){
         //****NAvigate to Nusery Dashbaord
+      }
+      else if (response_data['role']== "DeliveryBoy"){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>DelieveryManage()));
       }
       else{
         Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminDashboard()));
