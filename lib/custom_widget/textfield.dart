@@ -6,7 +6,7 @@ class Textfield extends StatefulWidget {
   final TextInputType keyboardType;
   bool obscure ;
   bool readOnly;
-  final Icon icon;
+   Icon? icon;
   final VoidCallback ? onTap;
   String hint;
   Textfield(
@@ -15,7 +15,7 @@ class Textfield extends StatefulWidget {
       required this.hint, this.keyboardType=TextInputType.text,this.readOnly=false,
       this.validator,
       this.onTap,
-        required this.icon,
+         this.icon,
       required this.Controller});
 
   @override

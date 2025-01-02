@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_nursery_zone/nurseries/add_plant.dart';
 import 'package:plant_nursery_zone/nurseries/chat_screen.dart';
+import 'package:plant_nursery_zone/nurseries/manage_plant.dart';
 
 import '../custom_widget/custom_card.dart';
 import 'delievery_boy.dart';
@@ -47,9 +48,14 @@ class _NurseryZoneDashboardState extends State<NurseryZoneDashboard> {
                 child: CustomContainer(
                     titleText: 'Add Plant',
                     descriptionText: 'Add new plants to your inventory,')),
-            CustomContainer(
-              titleText: 'Manage\n Plants',
-              descriptionText: 'Edit, delete and manage your plants inventory ',
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ManagePlant()));
+              },
+              child: CustomContainer(
+                titleText: 'Manage\n Plants',
+                descriptionText: 'Edit, delete and manage your plants inventory ',
+              ),
             ),
             CustomContainer(
               titleText: 'Manage\n Orders',

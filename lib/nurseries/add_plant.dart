@@ -2,11 +2,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plant_nursery_zone/nurseries/manage_plant.dart';
+import 'package:plant_nursery_zone/provider/plant_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../custom_widget/button.dart';
 import '../custom_widget/textfield.dart';
+import 'package:provider/provider.dart';
+
 
 class AddPlant extends StatefulWidget {
-  const AddPlant({super.key});
+  final String ? plant_id;
+  final String buttonName;
+   AddPlant({super.key, this.buttonName= 'Add Plant', this.plant_id});
 
   @override
   State<AddPlant> createState() => _AddPlantState();
@@ -19,12 +25,24 @@ class _AddPlantState extends State<AddPlant> {
   final TextEditingController stockController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+   File? image;
+  String? _user_id;
+  Future<void> load_data() async{
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      _user_id = pref.getString('id');
+    });
+
+  }
+
 
   Future<void> selectImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    final XFile? _image = await _picker.pickImage(source: ImageSource.gallery);
+    if (_image != null) {
       setState(() {
-        imageController.text = image.path;  // Store image path in the TextField
+        imageController.text = _image.path;
+        image = File(_image.path);
+        // Store image path in the TextField
       });
     }
     else {
@@ -44,29 +62,16 @@ class _AddPlantState extends State<AddPlant> {
     return true;  // All fields are filled
   }
 
-  void navigateToNextScreen() {
-    if (validateFields()) {
-      plantNameController.clear();
-      discriptionController.clear();
-      priceController.clear();
-      stockController.clear();
-      imageController.clear();
-      // Proceed to the next screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ManagePlant()),
-      );
-    } else {
-      // Show a message if any field is empty
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill all fields!')),
-      );
-    }
+  @override
+  void initState() {
+    load_data();
+    super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<PlantProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -178,8 +183,43 @@ class _AddPlantState extends State<AddPlant> {
                         height: 40,
                       ),
                       Button(
-                          onpress:navigateToNextScreen,
-                          buttonName: 'Add Plant',
+                          onpress:(){
+                            if (validateFields()) {
+                              // Proceed to the next screen
+                              Map<String,dynamic> request_data = {
+                                'nursery_id':_user_id.toString(),
+                                'name':plantNameController.text,
+                                'description':discriptionController.text,
+                                'price':priceController.text,
+                                'stock':stockController.text,
+                                'image':imageController.text
+                              };
+                              print(request_data);
+                              provider.add_plant(request_data);
+                              setState(() {
+
+                              if(provider.add_plant_response!=null){
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Plant added successfully.')));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ManagePlant()),
+                                );
+                                plantNameController.clear();
+                                discriptionController.clear();
+                                priceController.clear();
+                                stockController.clear();
+                                imageController.clear();
+                              }
+                              });
+
+                            } else {
+                              // Show a message if any field is empty
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Please fill all fields!')),
+                              );
+                            }
+                          },
+                          buttonName: widget.buttonName,
                           height: 40,
                           weight: 300)
                     ],

@@ -22,7 +22,7 @@ class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 30,left: 30,right: 30),
+      padding: const EdgeInsets.only(top: 10,left: 30,right: 30),
       child: InkWell(
         onTap:widget.onpress ,
         child: Container(

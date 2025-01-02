@@ -81,14 +81,14 @@ class _RegisterState extends State<Register> {
                 'Register',
                 style: TextStyle(
                     fontSize: 25,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
               SizedBox(
                 height: 50,
               ),
               Textfield(
-                icon:Icon(Icons.person),
+                icon:Icon(Icons.person,color: Colors.green,),
                 hint: 'Name',
                 Controller: nameController,
                 validator: (value) {
@@ -97,6 +97,9 @@ class _RegisterState extends State<Register> {
                   }
                   return null;
                 },
+              ),
+              SizedBox(
+                height: 10,
               ),
               Textfield(
                 icon: Icon(Icons.home,color: Colors.green,),
@@ -110,8 +113,11 @@ class _RegisterState extends State<Register> {
                   }
                 },
               ),
+              SizedBox(
+                height: 10,
+              ),
               Textfield(
-                  icon: Icon(Icons.email),
+                  icon: Icon(Icons.email,color: Colors.green,),
                   hint: 'Enter your email',
                   Controller: emailController,
                   validator: (value) {
@@ -123,6 +129,9 @@ class _RegisterState extends State<Register> {
                     }
                     return null;
                   }),
+              SizedBox(
+                height: 10,
+              ),
               Textfield(
                 icon: Icon(Icons.phone,color: Colors.green,),
                 hint: 'Enter your contact number',
@@ -132,6 +141,9 @@ class _RegisterState extends State<Register> {
                   { return "Enter PhoneNumber"; }
                   return null;
                 },
+              ),
+              SizedBox(
+                height: 10,
               ),
               Textfield(
                 icon: Icon(Icons.lock,color: Colors.green,),
@@ -147,8 +159,11 @@ class _RegisterState extends State<Register> {
                   return null;
                 },
               ),
+              SizedBox(
+                height: 10,
+              ),
               Textfield(
-                icon: Icon(Icons.lock),
+                icon: Icon(Icons.lock,color: Colors.green,),
                 hint: 'Confirm Password',
                 Controller: confirmPasswordController,
                 validator: (value) {
@@ -203,7 +218,7 @@ class _RegisterState extends State<Register> {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
